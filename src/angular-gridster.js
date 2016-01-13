@@ -311,6 +311,18 @@
 				if (item.oldRow !== null && typeof item.oldRow !== 'undefined') {
 					var samePosition = item.oldRow === row && item.oldColumn === column;
 					var inGrid = this.grid[row] && this.grid[row][column] === item;
+					var ignoreItemsAndItem = (ignoreItems || []).concat([item]);
+					var overlappingItems = this.getItems(
+						row,
+						column,
+						item.sizeX,
+						item.sizeY,
+						ignoreItemsAndItem
+					);
+					if (overlappingItems.length > 0) {
+						this.autoSetItemPosition(item);
+						return;
+					}
 					if (samePosition && inGrid) {
 						item.row = row;
 						item.col = column;
