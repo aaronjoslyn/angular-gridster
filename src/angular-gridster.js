@@ -57,19 +57,20 @@
 					return;
 				}
 				flag = true;
-				$timeout(function() {
+				this.activeTimeOuts.push($timeout(function() {
 					flag = false;
 					if (gridster.loaded) {
 						gridster.floatItemsUp();
 					}
 					gridster.updateHeight(gridster.movingItem ? gridster.movingItem.sizeY : 0);
-				});
+				}, 30));
 			};
 
 			/**
 			 * A positional array of the items in the grid
 			 */
 			this.grid = [];
+			this.activeTimeOuts = [];
 
 			/**
 			 * Clean up after yourself
@@ -80,6 +81,12 @@
 					this.grid = null;
 				}
 				this.$element = null;
+
+				if (this.activeTimeOuts) {
+					this.activeTimeOuts.forEach(function (t) {
+						$timeout.cancel(t);
+					});
+				}
 			};
 
 			/**
